@@ -10,9 +10,9 @@ export default defineConfig({
       includeAssets: ["favicon.svg", "favicon.ico", "robots.txt"],
       manifest: {
         name: "My Todo PWA",
-        short_name: "TodoPWA",
+        short_name: "IRCTC Rail Connect",
         description: "Simple Todo app built with Vite + React",
-        theme_color: "#ffffff",
+        theme_color: "#ff9501ff",
         icons: [
           {
             src: "/irctc.png",

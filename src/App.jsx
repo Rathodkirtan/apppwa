@@ -1,30 +1,40 @@
-import { useState } from "react";
-// Assuming you import './App.css' in your main index.js or App.js file for these styles to work
-import './App.css'; 
+import { useState, useEffect } from "react";
+import './App.css';
 
 function App() {
   const [task, setTask] = useState("");
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(JSON.parse(localStorage.getItem('todos')) || []);
+
+  // Load from localStorage
+  useEffect(() => {
+    const savedTodos = JSON.parse(localStorage.getItem("todos"));
+    if (savedTodos) {
+      setTodos(savedTodos);
+    }
+  }, []);
+
+  // Save to localStorage when todos change
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   const addTodo = () => {
     if (task.trim() === "") return;
-    // Create a new todo object for potential future expansion (e.g., done status)
-    setTodos([...todos, { text: task, id: Date.now() }]);
+
+    const newTodo = { text: task, id: Date.now() };
+    setTodos([...todos, newTodo]);
     setTask("");
   };
 
-  // Note: We use the item's unique id for deletion instead of index (better practice)
   const deleteTodo = (id) => {
     setTodos(todos.filter((item) => item.id !== id));
   };
 
-  // Helper for Enter key press
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      addTodo();
-    }
+    if (e.key === "Enter") addTodo();
   };
 
+  
   return (
     <div className="todo-container">
       <h2>📝 Simple Todo App</h2>
@@ -48,8 +58,8 @@ function App() {
         {todos.map((item) => (
           <li key={item.id} className="todo-item">
             <span className="todo-text">{item.text}</span>
-            <button 
-              onClick={() => deleteTodo(item.id)} 
+            <button
+              onClick={() => deleteTodo(item.id)}
               className="delete-button"
             >
               X
